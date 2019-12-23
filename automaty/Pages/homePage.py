@@ -1,4 +1,4 @@
-from automaty.Locators.locators import Locators
+from selenium.common.exceptions import NoSuchElementException
 
 class HomePage(object):
 
@@ -21,6 +21,8 @@ class HomePage(object):
         self.menu_projekty = '//a[@class="metismenu-link"][@href="/budzet/projekty"]'
         self.menu_glosowania = '//a[@class="metismenu-link"][@href="/budzet/glosowania"]'
 
+        self.last_used_title = '//*[contains(text(),"TestKG ")]'
+
 
     # methods for HomePage
 
@@ -32,3 +34,17 @@ class HomePage(object):
 
     def click_konsultacje(self):
         self.driver.find_element_by_xpath(self.menu_konsultacje).click()
+
+    """
+    FUNC USED WITH CREATING UNIQUE PROJECT TITLES (creating sequence number)
+    searching for the last used project title which contains string: "TestKG "\
+    if there is one - func checks if there is an int after the string and then adds 1 to it\
+    if there isn't - func returns 1 (it means that we're creating first project ever)
+    """
+
+    def find_last_title_number(self):
+        try:
+            title = self.driver.find_element_by_xpath(self.last_used_title).text
+            return int((title.split(" "))[-1]) + 1
+        except NoSuchElementException:
+            return 1

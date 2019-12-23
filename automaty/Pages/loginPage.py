@@ -1,5 +1,3 @@
-from automaty.Locators.locators import Locators
-
 class LoginPage(object):
 
     def __init__(self, driver):
