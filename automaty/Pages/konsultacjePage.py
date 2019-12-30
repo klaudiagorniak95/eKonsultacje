@@ -6,14 +6,21 @@ class KonsultacjePage(object):
 
     def __init__(self, driver):
         self.driver = driver
-
-        # instance of homePage method used for creating a new title for konsultacja (adding unique number to title)
+        # self.title = None
         self.title_number = HomePage(self.driver).find_last_title_number()
+
+
+        # instance of homePage class method used for creating a new title for konsultacja (adding unique number to title)
+        # self.title_number = HomePage(self.driver).find_last_title_number()
 
 
         # WebElements for konsultacjePage
 
         self.nowa_button = '//button[@type="button"][@class="mb-2 mr-2 btn-icon btn btn-success"]'
+        # self.konsultacja_by_title = '//*[contains(text(), ' + str(self.title) + ')]' + '//td[7]'
+
+        # WebElements for creating konsultacja
+
         self.tytul_input = '//input[@id="title"][@name="title"]'
         self.tryb_radio = {'1': '//div[@class="form-check"]//label[@for="mode-0"]',
                                  '2': '//div[@class="form-check"]//label[@for="mode-1"]',
@@ -55,6 +62,7 @@ class KonsultacjePage(object):
         self.konsultacja_utworz_button = '//form[@method="post"]//button[@type="submit"]'
 
     # methods for konsultacjePage
+
 
     def nowa_konsultacja(self):
         self.driver.find_element_by_xpath(self.nowa_button).click()
@@ -129,6 +137,15 @@ class KonsultacjePage(object):
     def utworz_konsultacje_button(self):
         self.driver.find_element_by_xpath(self.konsultacja_utworz_button).click()
 
+    # func searches for created konsultacja in the table (by its title) and returns its status_in_table
+
+    def find_konsultacja_status_intable(self):
+        self.konsultacja_by_title = '//td[contains(text(), ' + '"' + str(self.title) + \
+                                    '"' + ')]' + '/following-sibling::td[5]'
+        self.status_in_table = self.driver.find_element_by_xpath(self.konsultacja_by_title)
+        return self.status_in_table.text
+
+
     # steps for konsutlacjePage
 
     def wypelnij_pola_wymagane(self, data_od, data_do):
@@ -149,7 +166,7 @@ class KonsultacjePage(object):
         self.sonda_do_konsultacja(data_do)
         self.sonda_tresc_pytania()
         self.sonda_pokaz_odpowiedzi()
-        self.odpowiedz = ['gory', 'morze']
+        self.odpowiedz = ['gory', 'morze', 'miasto']
         for i in range(len(self.odpowiedz)):
             self.sonda_dodaj_odpowiedz()
             self.sonda_tresc_odpowiedzi(self.odpowiedz[i])

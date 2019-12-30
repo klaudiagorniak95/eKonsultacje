@@ -1,4 +1,8 @@
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 
 class HomePage(object):
 
@@ -13,8 +17,8 @@ class HomePage(object):
 
         # Web Elements for homePage - Menu
 
-        self.menu_konsultacje = '//a[@class="metismenu-link"][@href="/konsultacje"][text()="Konsultacje"]'
-        self.menu_budzetObywatelski = '//a[@class="metismenu-link"][text()="Budżet obywatelski"]'
+        self.menu_konsultacje = '//a[@href="/konsultacje"][text()="Konsultacje"]'
+        self.menu_budzet_obywatelski = '//a[@class="metismenu-link"][text()="Budżet obywatelski"]'
         self.menu_budzet = '//a[@class="metismenu-link"][@href="/budzety"][text()="Budżet"]'
         self.menu_harmonogramy = '//a[@class="metismenu-link"][@href="/budzet/harmonogramy"]'
         self.menu_stronyPomocy = '//a[@class="metismenu-link"][@href="/budzet/strony"]'
@@ -33,12 +37,11 @@ class HomePage(object):
         self.driver.find_element_by_xpath(self.logout_button).click()
 
     def click_konsultacje(self):
-        self.driver.find_element_by_xpath(self.menu_konsultacje).click()
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, self.menu_konsultacje))).click()
 
-    """
-    FUNC USED WITH CREATING UNIQUE PROJECT TITLES (creating sequence number)
-    searching for the last used project title which contains string: "TestKG "\
-    if there is one - func checks if there is an int after the string and then adds 1 to it\
+    """FUNC USED TO CREATE UNIQUE PROJECT TITLES 
+    (creating sequence number) searches for the last used project title which contains string: "TestKG "
+    if there is one - func checks if there is an int after the string and returns int+1;
     if there isn't - func returns 1 (it means that we're creating first project ever)
     """
 
